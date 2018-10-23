@@ -3,15 +3,16 @@
         <h1 class="title">党建E家后台管理系统</h1>
         <div class="login-box">
             <h2 class="login-box-title">请登录</h2>
-            <el-form class="form" ref="form" :rules="rule" :model="formData">
+            <el-form class="form" ref="form"  :model="formData">
+                <!-- :rules="rule" -->
                 <el-form-item label="用户名" prop="username">
                     <el-input v-model="formData.username" type="username" placeholder="请输入用户名"></el-input>               
                 </el-form-item>
                 <el-form-item label="密码" prop="password">
-                    <el-input v-model="formData.password" type="password" placeholder="请输入密码" @keyup.enter.native="validateLogin"></el-input>                      
+                    <el-input v-model="formData.password" type="password" placeholder="请输入密码" @keyup.enter.native="handleLogin"></el-input>                      
                 </el-form-item>
             </el-form>
-            <el-button @click="validateLogin" type="primary" class="login-btn" :loading="isLoading">
+            <el-button @click="handleLogin" type="primary" class="login-btn" :loading="isLoading">
                 登录
             </el-button>           
         </div>
@@ -22,29 +23,29 @@
 
 export default {
     data(){
-        const validateUsername = (rule, value, callback) => {
-            if(!value){
-                callback(new Error("必须输入合法用户名"))
-            }else{
-                callback()
-            }
-        }
-        const validatePassword = (rule, value, callback) => {
-            if(value && value.length>=5){
-                callback()
-            }else{               
-                callback(new Error("请输入合法的密码"))
-            }
-        }
+        // const validateUsername = (rule, value, callback) => {
+        //     if(!value){
+        //         callback(new Error("必须输入合法用户名"))
+        //     }else{
+        //         callback()
+        //     }
+        // }
+        // const validatePassword = (rule, value, callback) => {
+        //     if(value && value.length>=5){
+        //         callback()
+        //     }else{               
+        //         callback(new Error("请输入合法的密码"))
+        //     }
+        // }
         return{
             formData:{
                 username:"",
                 password:""
             },
-            rule:{
-               username:[{validator: validateUsername, trigger: 'blur'}],   
-               password:[{validator: validatePassword, trigger: 'blur'}]
-            },
+            // rule:{
+            //    username:[{validator: validateUsername, trigger: 'blur'}],   
+            //    password:[{validator: validatePassword, trigger: 'blur'}]
+            // },
             isLoading:false,
         }
     },
@@ -57,7 +58,7 @@ export default {
                     this.$store.commit("CHANGE_USERINFO",res.data)                                    
                     this.$message.success("登录成功")                 
                     setTimeout(()=>{
-                        this.$router.push("/layout/index")
+                        this.$router.push("/")
                     },1000)
                 }else{
                     this.$message.error(res.msg)
@@ -67,15 +68,15 @@ export default {
                 this.isLoading = false
             })
         },
-        validateLogin(){
-            this.$refs["form"].validate((valid) => {
-                if (valid) {
-                    this.handleLogin()
-                } else {
-                    return false;
-                }
-            });
-        }
+        // validateLogin(){
+        //     this.$refs["form"].validate((valid) => {
+        //         if (valid) {
+        //             this.handleLogin()
+        //         } else {
+        //             return false;
+        //         }
+        //     });
+        // }
     }
 };
 </script>

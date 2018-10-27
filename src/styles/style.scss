@@ -18,3 +18,7 @@
 *{
     padding: 0;margin: 0;
 }
+
+.main-content .el-card{
+    min-height: calc(100vh - 160px);
+}

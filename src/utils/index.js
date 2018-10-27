@@ -5,8 +5,7 @@ const env = process.env.NODE_ENV    //生产环境下  被设置为production
 let baseURL = env == "development" ? "/api" : "/"
 const instance = axios.create({
     baseURL,
-    timeout: 15000,
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+    timeout: 15000
 })
 const xhr = {
     fetch(url, data, config, methods) {

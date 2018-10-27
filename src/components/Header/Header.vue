@@ -1,6 +1,6 @@
 <template>
         <div class="header">
-            <span class="title">
+            <span class="header-warp">
                 党建E家后台管理系统
             </span>
             <!-- <el-breadcrumb separator="/">
@@ -36,7 +36,7 @@
         border-bottom: 1px solid #f1f1f1;
         overflow: hidden;
         text-align: center;
-        .title {
+        .header-warp {
             overflow: hidden;
             text-align: center;
             font-weight: 500;

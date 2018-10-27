@@ -1,15 +1,13 @@
 <template>
     <div class="layout">
         <el-row>
-            <el-col :span="4" class="fll">
+            <el-col :span="4" class="fll" style="height:100vh">
                 <SideBar></SideBar>
             </el-col>
-            <el-col :span="20">
+            <el-col :span="20" style="height:100vh;overflow:scroll">
                 <div>
-                     <Header></Header>
-                    <div class="main-content">
-                        <router-view></router-view>
-                    </div>
+                    <Header></Header>
+                    <AppMain></AppMain>
                 </div>            
             </el-col>
         </el-row>
@@ -19,10 +17,12 @@
 <script>
     import Header from "@/components/Header/Header.vue"
     import SideBar from "@/components/Side-bar/side-bar.vue"
+    import AppMain from "@/components/appMain/appMain.vue"
     export default {
         components:{
             Header,
-            SideBar
+            SideBar,
+            AppMain
         },
         data() {
             return{

@@ -1,7 +1,10 @@
 <template>
     <div>
-        <div class="title">
+        <div class="title" v-if="!isShow">
             添加管理员
+        </div>
+        <div class="title" v-else>
+            修改个人信息
         </div>
         <el-card>
             <el-form :label-position="right" label-width="80px" :model="formData">
@@ -33,7 +36,8 @@
                     <el-input type="textarea" v-model="formData.desc" style="width:400px"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="handleSubmit">确认添加</el-button>
+                    <el-button type="primary" @click="handleSubmit" v-if="!isShow">确认添加</el-button>
+                    <el-button type="primary" @click="handleChange" v-else>返回</el-button>
                 </el-form-item>
             </el-form>
         </el-card>
@@ -59,22 +63,71 @@
                     phone: "",
                     sex: "",
                 },
-                right: "right"
+                right: "right",
+                isShow:false
             }
         },
         methods: {
             handleSubmit() {
                 this.$axios.post("/admin/user", this.formData).then(res => {
-                    console.log(res)
+                    // console.log(res)
                     if (res.code == 200) {
                         this.$message.success(res.msg)
                         setTimeout(() => {
-                            this.$router.push("/layout/userList")
+                            this.$router.push("userList")
                         }, 1000)
+                    }
+                })
+            },
+            getEditData(){
+                this.$axios.get(`/admin/user/${this.$route.query.id}`,this.formData).then(res=>{
+                    this.formData = res.data
+                })
+            },
+            handleChange(){
+                this.$axios.patch(`/admin/user/${this.$route.params}`,this.formData).then(res=>{
+                    console.log("aaaaaaa",res)
+                    if(res.code == 200){
+                        this.$message.success(res.msg)
+                        setTimeout(()=>{
+                            this.$router.push("userList")
+                            console.log("ccc",res);
+                            
+                        },1000)
                     }
                 })
             }
         },
+        created(){
+            if(this.$route.name == "userInfo"){
+                this.isShow = true
+            }else{
+                this.isShow = false
+            }
+            if(this.isShow){
+                this.getEditData()
+            }
+        },
+        watch:{
+            $route(to,from){
+                if(to.name == "userInfo"){
+                    this.isShow = true
+                }else{
+                    this.isShow = false
+                    this.formData = {
+                        username: "",
+                        idcardNumber: "",
+                        password: "",
+                        avatar: "",
+                        nickname: "",
+                        desc: "",
+                        job: "",
+                        phone: "",
+                        sex: "",
+                    }
+                }
+            }
+        }
     }
 </script>
 

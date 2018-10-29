@@ -39,7 +39,6 @@
                 <el-form-item>
                     <el-button type="primary" @click="handleSubmit" v-if="!isShow">提交</el-button>
                     <el-button type="primary" @click="handleSave" v-else>保存</el-button>
-                    <el-button>取消</el-button>
                 </el-form-item>
             </el-form>
         </el-card>
@@ -66,18 +65,18 @@
             }
         },
         methods:{
-            getNews(){
+            getNews(){  // 下拉框新闻渲染
                 this.$axios.get("/admin/news").then(res=>{  
                     console.log(res)               
                     this.news = res.data                 
                 })
             },
-            getEditData(){
+            getEditData(){   //得到单个修改的数据
                 this.$axios.get(`/admin/swiper/${this.$route.query.id}`).then(res=>{
                     this.formData = res.data
                 })
             },
-            handleSubmit(){
+            handleSubmit(){  // 提交添加
                 this.$axios.post("/admin/swiper",this.formData).then(res=>{
                     console.log(res)
                     if(res.code == 200){
@@ -85,32 +84,40 @@
                         setTimeout(()=>{
                             this.$router.push("swiper")
                         },1000)
-                    }
+                    }   
                 })
             },
-            handleSave(){
-                this.$axios.post("/admin/swiper")
+            handleSave(){  // 保存修改
+                this.$axios.patch(`/admin/swiper/${this.$route.query.id}`,this.formData).then(res=>{
+                    console.log("ccc >>",res)
+                    if(res.code == 200){
+                        this.$message.success(res.msg)
+                        setTimeout(()=>{
+                            this.$router.push("swiper")
+                        },1000)
+                    }
+                })  
             }
         },  
         created(){
             if(this.$route.name == "editSwiper"){
-                    this.isShow = true
-                }else{
-                    this.isShow = false
-                }
+                this.isShow = true
+            }else{
+                this.isShow = false
+            }
             this.getNews()
             if(this.isShow){
                 this.getEditData()
             }
             
         },
-        watch:{
-            $route(to,from){
+        watch:{   
+            $route(to,from){       // 监听路由
                 if(to.name == "editSwiper"){
                     this.isShow = true
                 }else{
                     this.isShow = false
-                    this.formData = {
+                    this.formData = {   //  如果为添加页面 则清空数据
                         title:"",
                         img:"",
                         newsId:"",

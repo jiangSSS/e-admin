@@ -4,29 +4,24 @@ import createPersistedState from "vuex-persistedstate"
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
-    state:{
-        userinfo:{
-            ID_card:"",
-            password:"",
-            username:"",
-            header:"",
-            hometown:"",
-            address:"",
-            nation:"",
-            wxNum:"",
-            qqNum:"",
-            education:"",
-            jobRank:"",
-            joinPartyTime:"",
-            lastPayTime:"",
-            partyIdentity:"",
+    state: {
+        userInfo: {
+            username: "",
+            idcardNumber: "",
+            password: "",
+            avatar: "",
+            nickname: "",
+            desc: "",
+            job: "",
+            phone: "",
+            sex: "",
         },
-        token:"",
-        login:""
+        token: "",
+        login: ""
     },
-    mutations:{
-        USERINFO (state,userinfo){
-            state.userinfo = userinfo
+    mutations: {
+        CHANGE_userInfo(state, payload) {
+            state.userInfo = payload
         },
         // TOKEN (state,token){
         //     state.token = token
@@ -35,15 +30,17 @@ const store = new Vuex.Store({
         //     state.login = login
         // }
     },
-    actions:{
+    actions: {
 
     },
-    plugins:[createPersistedState({
-        storage:{
-            getItem:key => localStorage.getItem(key),
-            setItem:(key,value)=> localStorage.setItem(key,value, { expires: 3, secure: true }),
-            removeItem: key => localStorage.removeItem(key),
-        }
-    })]
+    plugins: [
+        createPersistedState({
+            storage: {
+                getItem: key => sessionStorage.getItem(key),
+                setItem: (key, value) => sessionStorage.setItem(key, value),
+                removeItem: key => sessionStorage.removeItem(key),
+            }
+        })
+    ]
 })
 export default store

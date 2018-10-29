@@ -1,10 +1,9 @@
 <template>
     <div>
         <div class="title">
-                管理员列表
-            </div>
-        <el-card>
-            
+            管理员列表
+        </div>
+        <el-card>           
             <el-table :data="tableData" style="width: 100%">
                 <el-table-column prop="username" label="姓名" width="180"></el-table-column>
                 <el-table-column prop="phone" label="手机号" width="180"></el-table-column>
@@ -17,7 +16,7 @@
                 <el-table-column prop="desc" label="个性签名"></el-table-column>
                 <el-table-column label="操作">          
                     <template slot-scope="scope">
-                        <el-button>查看</el-button>
+                        <el-button @click="handleDetail(scope.row._id)">查看</el-button>
                         <el-button type="danger" @click="handleDelete(scope.row._id)">删除</el-button>
                     </template>
                 </el-table-column>
@@ -28,7 +27,7 @@
                 :page-size="5"
                 small 
                 layout="prev, pager, next" 
-                :total="10"
+                :total="count"
                 class="pagination">
             </el-pagination>
         </el-card>
@@ -50,8 +49,7 @@
                     console.log("管理员 >>",res)
                     if(res.code == 200){
                         this.count = res.data.length
-                        this.tableData = res.data
-                       
+                        this.tableData = res.data                      
                     }
                 })
             },
@@ -59,17 +57,21 @@
                 this.page = page
                 this.getData()
             },
-
+            handleDetail(id){
+                this.$router.push({path:"userInfo",query:{id}})
+            },
             handleDelete(id){           
                 this.$confirm('此操作将删除该管理员, 是否继续?', '警告 ！', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    let id = this.$route.query.id
-                    this.$axios.post(`/admin/user/${id}`,{tableData:[id]}).then(res => {
+                    // let id = this.$route.query.id
+                    this.$axios.post(`/admin/user/${id}`).then(res => {
                         this.$message.success(res.msg)
-                        this.getData()
+                        setTimeout(()=>{
+                             this.getData()
+                        },500)                      
                     })
                 }).catch(() => {
                     this.$message({

@@ -33,16 +33,12 @@
                         <el-menu-item index="/layout/addNews">添加新闻</el-menu-item>
                     </el-menu-item-group>
                 </el-submenu>
-                <el-submenu index="4">
+                <el-menu-item index="/">
                     <template slot="title">
                         <i class="el-icon-setting"></i> 
                         <span>登录</span>
-                    </template>                   
-                     <el-menu-item-group title="用户管理">
-                        <el-menu-item index="/login">登录页</el-menu-item>
-                        <el-menu-item index="/">首页</el-menu-item>
-                    </el-menu-item-group>                                
-                </el-submenu>
+                    </template>                                             
+                </el-menu-item>
             </el-menu>
         </div>
     </div>

@@ -11,14 +11,13 @@
             </el-breadcrumb> -->
             <span class="userInfo flr">
                 <el-dropdown>
-                    <!-- @command="handleCommand" -->
                     <span class="el-dropdown-link">
                         <i class="iconfont icon-head-active"></i>
                         <i class="el-icon-arrow-down el-icon--right"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item command="1">修改个人信息</el-dropdown-item>
-                        <el-dropdown-item command="2">退出登录</el-dropdown-item>
+                        <el-dropdown-item  @click="handleDetail(scope.row._id)">修改个人信息</el-dropdown-item>
+                        <el-dropdown-item @click.native="handleLogout">退出登录</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </span>
@@ -26,8 +25,35 @@
 </template>
 
 <script>
+    import {mapState} from "vuex"
     export default {
-
+        data(){
+            return{
+                username:"",
+                password:""
+            }
+        },
+        methods:{
+            handleLogout(){
+                this.$axios.get("/admin/user/logout").then(res=>{
+                    let userInfo = {
+                        username:"",
+                        password:""
+                    }
+                    if(res.code == 200){
+                        this.$message.success(res.msg)
+                        this.$store.commit("CHANGE_userInfo",userInfo)
+                        this.$router.push("/")
+                    }else{
+                        this.$store.commit("CHANGE_userInfo",userInfo)
+                        this.$message("登录状态已过期")
+                    }
+                })  
+            }
+        },
+        computed:{
+            ...mapState(["userInfo"])
+        }
     }
 </script>
 

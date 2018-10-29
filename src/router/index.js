@@ -14,6 +14,14 @@ export default new Router({
       }
     },
     {
+      path: '/newsDetail',
+      name: 'newsDetail',
+      component: ()=>import("@/views/news/newsDetail.vue"),
+      meta:{
+        title:"新闻详情"
+      }
+    },
+    {
       path: '/layout',
       name: 'layout',
       component: ()=>import("@/views/Layout/layout.vue"),
@@ -44,6 +52,14 @@ export default new Router({
           }
         },
         {
+          path: 'userInfo',
+          name: 'userInfo',
+          component: ()=>import("@/views/userList/addUser.vue"),
+          meta:{
+            title:"个人信息"
+          }
+        },
+        {
           path: 'newsList',
           name: 'newsList',
           component: ()=>import("@/views/news/newsList.vue"),
@@ -57,14 +73,6 @@ export default new Router({
           component: ()=>import("@/views/news/addNews.vue"),
           meta:{
             title:"添加新闻"
-          }
-        },
-        {
-          path: 'newsDetail',
-          name: 'newsDetail',
-          component: ()=>import("@/views/news/newsDetail.vue"),
-          meta:{
-            title:"新闻详情"
           }
         },
         {

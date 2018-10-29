@@ -50,7 +50,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$axios.post(`/admin/swiper`,{query:{id}}).then(res=>{
+                    this.$axios.post(`/admin/swiper/${id}`).then(res=>{
                         console.log(res,"删除轮播图")
                         if(res.code == 200){
                             this.$message.success("删除成功 ！") 

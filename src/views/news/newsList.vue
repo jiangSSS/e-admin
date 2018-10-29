@@ -13,9 +13,9 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="category.title" label="分类"></el-table-column>
-                <el-table-column label="操作">          
+                <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-button @click="handleDetail(scope.row._id)">查看</el-button> 
+                        <el-button @click="handleDetail(scope.row._id)">查看</el-button>
                         <el-button type="danger" @click="handleDelete(scope.row._id)">删除</el-button>
                     </template>
                 </el-table-column>
@@ -26,33 +26,50 @@
 
 <script>
     export default {
-        data(){
-            return{
-                tableData:[]
+        data() {
+            return {
+                tableData: []
             }
         },
-        methods:{
-            getData(){
-                this.$axios.get("/admin/news",this.tableData).then(res=>{
+        methods: {
+            getData() {
+                this.$axios.get("/admin/news", this.tableData).then(res => {
                     console.log(res)
-                    this.tableData = res.data                  
+                    this.tableData = res.data
                 })
             },
-            handleDetail(id){
-               this.$router.push({path:"newsDetail",query:{id}}).then(res=>{
-                   
-               })
-            }
+            handleDetail(id) {
+                this.$router.push({ path: "/newsDetail", query: { id } })                    
+            },
+            handleDelete(id) {
+                this.$confirm('此操作将删除该管理员, 是否继续?', '警告 ！', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$axios.post(`/admin/news/${id}`).then(res => {
+                        this.$message.success(res.msg)
+                        setTimeout(()=>{
+                            this.getData()
+                        },500)
+                        
+                    }).catch(() => {
+                        this.$message({
+                            type: "info",
+                            message: "已取消删除"
+                        })
+                    })
+                })
+            },
         },
-        created(){
+        created() {
             this.getData()
         }
     }
 </script>
 
 <style scoped>
-   
-    .img{
+    .img {
         width: 80px;
         height: 80px;
     }

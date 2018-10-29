@@ -10,21 +10,13 @@
                 </el-form-item>
                 <el-form-item label="作者" required>
                     <el-select v-model="formData.author">
-                        <el-option 
-                            v-for="(item,index) in users" 
-                            :key="index" 
-                            :value="item._id"
-                            :label="item.nickname">
+                        <el-option v-for="(item,index) in users" :key="index" :value="item._id" :label="item.nickname">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="新闻类型">
                     <el-select v-model="formData.category" placeholder="请选择类型">
-                        <el-option 
-                            v-for="(item,index) in categories" 
-                            :key="index"
-                            :value="item._id"
-                            :label="item.title">
+                        <el-option v-for="(item,index) in categories" :key="index" :value="item._id" :label="item.title">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -36,7 +28,7 @@
                     </quill-editor>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="handleAdd" >提交</el-button>
+                    <el-button type="primary" @click="handleAdd">提交</el-button>
                     <el-button>取消</el-button>
                 </el-form-item>
             </el-form>
@@ -45,9 +37,10 @@
 </template>
 
 <script>
-    import { quillEditor,Quill } from "vue-quill-editor"
-    // import { container, ImageExtend, QuillWatch } from "quill-image-extend-module"
-    // Quill.register('modules/ImageExtend', ImageExtend)
+    import axios from "axios"
+    import { quillEditor, Quill } from "vue-quill-editor"
+    import { container, ImageExtend, QuillWatch } from 'quill-image-extend-module'
+    Quill.register('modules/ImageExtend', ImageExtend)
 
     import Upload from "@/components/upload-avatar.vue"
     export default {
@@ -67,18 +60,22 @@
                     lookNum: "",
                     myQuillEditor: {},
                 },
-                users:[],
-                categories:[],
+                token:"",
+                users: [],
+                categories: [],
                 editorOption: {
                     modules: {
-                        // ImageExtend: {
-                        //     loading: true,
-                        //     name: 'img',
-                        //     action: "https://upload-z1.qiniup.com",
-                        //     response: (res) => {
-                        //         return res.info
-                        //     }
-                        // },
+                        ImageExtend: {
+                            loading: true,
+                            name: 'file',
+                            action: "https://upload-z1.qiniup.com",
+                            response: (res) => {
+                                return res.url
+                            },
+                             change: (xhr, formData) => {
+                             formData.append('token', this.token)
+                             } 
+                        },
                         toolbar: {
                             container: [
                                 ['bold', 'italic', 'underline', 'strike', "clean"], // 加粗、倾斜、下划线、删除线
@@ -87,50 +84,56 @@
                                 [{ 'color': [] }, { 'background': [] }], // 字体颜色、背景颜色
                                 ["image"],
                             ],
-                            // handlers: {
-                            //     'image': function () {
-                            //         QuillWatch.emit(this.quill.id)
-                            //     }
-                            // }
+                            handlers: {
+                                'image': function () {
+                                    QuillWatch.emit(this.quill.id)
+                                }
+                            }
                         }
                     }
                 },
             }
         },
         methods: {
-            getUser(){
-                this.$axios.get("/admin/user").then(res=>{
-                    if(res.code == 200){
+            getUser() {
+                this.$axios.get("/admin/user").then(res => {
+                    if (res.code == 200) {
                         this.users = res.data
-                    }            
+                    }
                 })
             },
-            getCategory(){
-                this.$axios.get("/admin/category").then(res=>{
-                    if(res.code == 200){
+            getCategory() {
+                this.$axios.get("/admin/category").then(res => {
+                    if (res.code == 200) {
                         this.categories = res.data
                     }
                 })
             },
-            handleChange({quill,html,text}){
+            handleChange({ quill, html, text }) {
                 this.formData.contentText = text
             },
-            handleAdd(){
-                this.$axios.post("/admin/news",this.formData).then(res=>{
+            handleAdd() {
+                this.$axios.post("/admin/news", this.formData).then(res => {
                     console.log(res)
                     if (res.code == 200) {
                         this.$message.success(res.msg)
-                        setTimeout(()=>{
+                        setTimeout(() => {
                             this.$router.push("newsList")
-                        },1000)
+                        }, 1000)
                     }
+                })
+            },
+            getToken(){
+                axios.get("http://upload.yaojunrong.com/getToken").then(res=>{
+                    this.token = res.data.data
                 })
             }
         },
-        created(){
+        created() {
             this.handleAdd()
             this.getUser()
             this.getCategory()
+            this.getToken()
         }
     }
 </script>

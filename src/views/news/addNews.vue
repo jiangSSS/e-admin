@@ -64,6 +64,7 @@
                 users: [],
                 categories: [],
                 editorOption: {
+                    //  富文本配置项
                     modules: {
                         ImageExtend: {
                             loading: true,
@@ -72,9 +73,9 @@
                             response: (res) => {
                                 return res.url
                             },
-                             change: (xhr, formData) => {
+                            change: (xhr, formData) => {
                              formData.append('token', this.token)
-                             } 
+                            } 
                         },
                         toolbar: {
                             container: [
@@ -111,6 +112,7 @@
             },
             handleChange({ quill, html, text }) {
                 this.formData.contentText = text
+                this.formData.contentText = this.formData.contentText.substring(0, 200) + "..."
             },
             handleAdd() {
                 this.$axios.post("/admin/news", this.formData).then(res => {

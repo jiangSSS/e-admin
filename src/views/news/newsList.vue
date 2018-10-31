@@ -32,16 +32,16 @@
             }
         },
         methods: {
-            getData() {
+            getData() {  // 获取新闻列表数据
                 this.$axios.get("/admin/news", this.tableData).then(res => {
                     console.log(res)
                     this.tableData = res.data
                 })
             },
-            handleDetail(id) {
+            handleDetail(id) { // 跳转到详情页面
                 this.$router.push({ path: "/newsDetail", query: { id } })                    
             },
-            handleDelete(id) {
+            handleDelete(id) {  // 删除一条新闻
                 this.$confirm('此操作将删除该管理员, 是否继续?', '警告 ！', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -52,7 +52,6 @@
                         setTimeout(()=>{
                             this.getData()
                         },500)
-                        
                     }).catch(() => {
                         this.$message({
                             type: "info",

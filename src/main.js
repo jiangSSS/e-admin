@@ -14,6 +14,7 @@ Vue.prototype.$axios = $axios
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
+
 import store from "./store"
 
 import  VueQuillEditor from 'vue-quill-editor'

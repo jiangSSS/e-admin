@@ -1,10 +1,11 @@
 <template>
     <div class="container">
-        <h1 class="title">党建E家后台管理系统</h1>
+        <h2 class="title">党建E家后台管理系统</h2>
         <div class="login-box">
-            <h2 class="login-box-title">请登录</h2>
+            <!-- <h2 class="login-box-title">请登录</h2> -->
             <el-form class="form" :model="formData">
                 <!-- :rules="rule" -->
+                
                 <el-form-item label="用户名">
                     <el-input v-model="formData.username" type="username" placeholder="请输入用户名"></el-input>
                 </el-form-item>
@@ -53,7 +54,7 @@
     };
 </script>
 
-<style scoped lang="scss">
+<style  scoped lang="scss">
     .container {
         overflow: hidden;
         min-height: 100vh;
@@ -62,6 +63,7 @@
         .title {
             margin-top: 150px;
             text-align: center;
+            font-weight: bold;
             color: #fff;
             font-weight: 400;
         }
